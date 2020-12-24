@@ -16,4 +16,5 @@ def store_print(store_name: str, books: list):
     for book in books:
         book_infos.append(book.infos())
     print(store_name)
-    print(tabulate(book_infos, headers=HEADERS, tablefmt="pretty"))
+    print(tabulate(book_infos, headers=HEADERS, tablefmt="pretty",
+                   colalign="left"))
