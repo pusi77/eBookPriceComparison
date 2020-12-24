@@ -11,8 +11,8 @@ librerie.coop
 +-----------------------------------------+---------------+---------+----------+-----------+
 |                  Title                  |    Author     |  Price  |  Format  |    DRM    |
 +-----------------------------------------+---------------+---------+----------+-----------+
-|  Guida galattica per gli autostoppisti  | Douglas Adams | € 12,50 | CARTACEO |           |
-|  Guida galattica per gli autostoppisti  | Douglas Adams | € 7,99  |   EPUB   | Adobe DRM |
+| Guida galattica per gli autostoppisti   | Douglas Adams | € 12,50 | CARTACEO |           |
+| Guida galattica per gli autostoppisti   | Douglas Adams | € 7,99  |   EPUB   | Adobe DRM |
 | Guida galattica per gli autostoppist... | Douglas Adams | € 16,50 | CARTACEO |           |
 | Guida galattica per gli autostoppist... | Douglas Adams | € 9,99  |   EPUB   | Adobe DRM |
 | Guida galattica per gli autostoppist... | Douglas Adams | € 28,00 | CARTACEO |           |
