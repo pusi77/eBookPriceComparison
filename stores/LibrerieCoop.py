@@ -28,7 +28,10 @@ class LibrerieCoop(AbstractStore.AbstractStore):
 
         for book in data:
             title = book.find(class_="titolo-prodotto").get_text().strip()
-            author = book.find('a', itemprop="author").get_text().strip()
+            author_html = book.find('a', itemprop="author")
+            if author_html is not None:
+                # sometimes author is not displayed on webpage
+                author = author_html.get_text().strip()
             price = book.find(class_="current-price").get_text().strip()
             format_ = book.find(class_="info-formato").get_text().strip()
             if format_ != PAPERBACK:
