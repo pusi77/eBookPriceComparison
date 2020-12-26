@@ -13,8 +13,11 @@ def checkUsage(argv: list):
 
 def store_print(store_name: str, books: list):
     book_infos = []
-    for book in books:
-        book_infos.append(book.infos())
-    print(store_name)
-    print(tabulate(book_infos, headers=HEADERS, tablefmt="pretty",
-                   colalign="left"))
+    print("📖" + store_name)
+    if not books:
+        print("Book not found!")
+    else:
+        for book in books:
+            book_infos.append(book.infos())
+        print(tabulate(book_infos, headers=HEADERS, tablefmt="pretty",
+                       colalign="left"))
