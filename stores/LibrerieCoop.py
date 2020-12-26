@@ -27,6 +27,10 @@ class LibrerieCoop(AbstractStore.AbstractStore):
         booklist = []
 
         for book in data:
+            format_ = book.find(class_="info-formato").get_text().strip()
+            if format_ == PAPERBACK:
+                continue
+
             title = book.find(class_="titolo-prodotto").get_text().strip()
             author_html = book.find('a', itemprop="author")
             author = None
@@ -34,13 +38,9 @@ class LibrerieCoop(AbstractStore.AbstractStore):
                 # sometimes author is not displayed on webpage
                 author = author_html.get_text().strip()
             price = book.find(class_="current-price").get_text().strip()
-            format_ = book.find(class_="info-formato").get_text().strip()
-            if format_ != PAPERBACK:
-                url = book.find("a", href=lambda href:
-                                href and "/libri/" in href)
-                drm = getProtection(str(BASE_URL) + url['href'])
-                booklist.append(Book.Book(title, author, price,
-                                format_.upper(), drm))
-                continue
-            booklist.append(Book.Book(title, author, price, format_.upper()))
+            book_url = book.find("a", href=lambda href:
+                                 href and "/libri/" in href)
+            drm = getProtection(str(BASE_URL) + book_url['href'])
+            booklist.append(Book.Book(title, author, price,
+                            format_.upper(), drm))
         return NAME, booklist
