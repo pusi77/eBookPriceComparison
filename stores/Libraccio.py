@@ -21,7 +21,7 @@ USERAGENT = ("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) "
 
 def removeFinalComma(string: str):
     # Sometimes there is a comma after author's name
-    if string[-1] == ",":
+    if string and string[-1] == ",":
         return string[:-1]
     else:
         return string
