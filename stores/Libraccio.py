@@ -1,4 +1,6 @@
 import aiohttp
+import logging
+import time
 from bs4 import BeautifulSoup
 
 import Book
@@ -53,11 +55,15 @@ class Libraccio():
     @staticmethod
     async def searchBook(title: str):
         url = f"{BASE_URL}/src/?xy={title}&ch={EBOOK_QUERY}"
+        logging.debug(f"Starting {NAME} download")
+        start_t = time.time()
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers={"User-Agent": USERAGENT}) as response:  # noqa: E501
                 content = await response.text()
-                soup = BeautifulSoup(content, 'html.parser')
-                data = soup.find_all('div', class_=BOOK_CLASS)
+                end_t = time.time()
+                logging.debug(f"{NAME} downloaded in {end_t - start_t}")
+        soup = BeautifulSoup(content, 'html.parser')
+        data = soup.find_all('div', class_=BOOK_CLASS)
         booklist = []
         for book in data:
             try:
