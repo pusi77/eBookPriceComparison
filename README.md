@@ -1,6 +1,6 @@
 # ebpc
 I was tired of searching and comparing eBooks on all my favourite sites, so i made this to automate it. 
-I'm mainly interested in low prices and permissive (ideally none) DRMs for ebooks.
+I'm mainly interested in low prices and permissive (ideally none) DRMs.
 
 Example:
 
