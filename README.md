@@ -23,14 +23,6 @@ librerie.coop
 - [Libraccio](https://www.libraccio.it/)
 - [librerie.coop](https://www.librerie.coop/)
 
-### Planning to support
-- [IBS](https://www.ibs.it/)
-
-### Will not support
-- [Amazon](https://www.amazon.it/) -> Kindle DRM everywhere
-- [Feltrinelli](https://www.lafeltrinelli.it) - > Kobo DRM almost everywhere (no way to know before purchase)
-
-
 ## ToDo
 - Logging
 
