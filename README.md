@@ -32,7 +32,7 @@ librerie.coop
 
 
 ## ToDo
-- Concurrent stores analysis(?)
+- Logging
 
 ## Known problems(?)
 - Search is limited to first page, but who needs >25 results for a book?

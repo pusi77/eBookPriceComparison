@@ -1,8 +1,9 @@
-import requests
+import aiohttp
 from bs4 import BeautifulSoup
 
 import Book
-from stores import AbstractStore
+from utils import printing
+
 
 # IMPORTANT NOTE:
 # I've no idea why, but searching with ebook-only filter doesn't show some
@@ -18,6 +19,12 @@ EBOOK_QUERY = "ebook"
 USERAGENT = ("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) "
              "Gecko/20100101 Firefox/15.0.1")
 
+BOOK_CLASS = "row"
+TITLE_CLASS = "title"
+AUTHOR_CLASS = "attr author"
+PRICE_CLASS = "sellpr"
+FORMAT_DRM_CLASS = "ebook-value-format"
+
 
 def removeFinalComma(string: str):
     # Sometimes there is a comma after author's name
@@ -27,10 +34,12 @@ def removeFinalComma(string: str):
         return string
 
 
-def ebookInfos(url: str):
-    page = requests.get(url, headers={"User-Agent": USERAGENT})
-    soup = BeautifulSoup(page.content, 'html.parser')
-    format_and_drm = soup.find('td', id="ebook-value-format").get_text()
+async def ebookInfos(url: str):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers={"User-Agent": USERAGENT}) as response:  # noqa: E501
+            content = await response.text()
+            soup = BeautifulSoup(content, 'html.parser')
+    format_and_drm = soup.find('td', id=FORMAT_DRM_CLASS).get_text()
     word_list = format_and_drm.split()
     format_ = word_list[0]
     if "DRM" in word_list:
@@ -40,30 +49,33 @@ def ebookInfos(url: str):
     return format_, drm
 
 
-class Libraccio(AbstractStore.AbstractStore):
+class Libraccio():
     @staticmethod
-    def searchBook(title: str):
+    async def searchBook(title: str):
         url = f"{BASE_URL}/src/?xy={title}&ch={EBOOK_QUERY}"
-        page = requests.get(url, headers={"User-Agent": USERAGENT})
-        soup = BeautifulSoup(page.content, 'html.parser')
-        data = soup.find_all('div', class_="row")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers={"User-Agent": USERAGENT}) as response:  # noqa: E501
+                content = await response.text()
+                soup = BeautifulSoup(content, 'html.parser')
+                data = soup.find_all('div', class_=BOOK_CLASS)
         booklist = []
-
         for book in data:
             try:
                 url = book.find("a", href=lambda href:
                                 href and "/ebook/" in href)
                 if url is None:
                     continue
-                title = book.find('div', class_="title").find('a').get_text()
-                author = book.find('div', class_="attr author") \
-                    .find('span', class_="data").get_text().strip()
+                title = book.find('div', class_=TITLE_CLASS) \
+                            .find('a').get_text()
+                author = book.find('div', class_=AUTHOR_CLASS) \
+                             .find('span', class_="data").get_text().strip()
                 author = removeFinalComma(author)
-                price = book.find('span', class_="sellpr").get_text()
-                format_, drm = ebookInfos(str(BASE_URL) + url['href'])
+                price = book.find('span', class_=PRICE_CLASS).get_text()
+                format_, drm = await ebookInfos(str(BASE_URL) +
+                                                url['href'])
                 booklist.append(Book.Book(title, author, price,
                                           format_.upper(), drm))
             except AttributeError:
                 # idk what causes this error
                 continue
-        return NAME, booklist
+        printing.store_print(NAME, booklist)
