@@ -9,7 +9,7 @@ verify_ssl = true
 tabulate = "*"
 requests = "*"
 beautifulsoup4 = "*"
-aiohttp = "*"
+aiohttp = ">=3.7.4"
 
 [requires]
 python_version = "3.9"
