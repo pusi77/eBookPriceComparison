@@ -13,7 +13,7 @@ def checkUsage(argv: list):
 
 def store_print(store_name: str, books: list):
     book_infos = []
-    print("📖" + store_name)
+    print("\U0001F56E" + store_name)
     if not books:
         print("Book not found!")
     else:
