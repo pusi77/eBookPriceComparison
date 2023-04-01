@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "ebookpricecomparison"
+version = "0.1.1"
+description = "Fast way to compare eBooks on multiple stores"
+authors = ["pusi77 <pusineriandrea@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.28.2"
+tabulate = "^0.9.0"
+aiohttp = "^3.8.4"
+beautifulsoup4 = "^4.12.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
