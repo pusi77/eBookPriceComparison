@@ -2,7 +2,6 @@ from tabulate import tabulate
 
 HEADERS = ("Title", "Author", "Price", "Format", "DRM")
 
-
 def checkUsage(argv: list):
     if len(argv) != 2:
         print('ERROR: Wrong number of arguments!\n')
