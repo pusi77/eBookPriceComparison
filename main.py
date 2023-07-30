@@ -13,10 +13,10 @@ DEBUG = False
 
 async def concurrent_search(book_name: str):
     await asyncio.gather(
-        # BookRepublic.BookRepublic.searchBook(book_name),
-        # Libraccio.Libraccio.searchBook(book_name),
-        # LibrerieCoop.LibrerieCoop.searchBook(book_name)
-        Unilibro.Unilibro.searchBook(book_name)
+        BookRepublic.BookRepublic.searchBook(book_name),
+        Libraccio.Libraccio.searchBook(book_name),
+        LibrerieCoop.LibrerieCoop.searchBook(book_name),
+        # Unilibro.Unilibro.searchBook(book_name)
     )
 
 if __name__ == "__main__":
