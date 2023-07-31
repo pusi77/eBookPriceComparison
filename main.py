@@ -2,7 +2,7 @@ import sys
 import asyncio
 import logging
 
-from utils import printing
+from utils import utils
 from stores import BookRepublic
 from stores import Libraccio
 from stores import LibrerieCoop
@@ -25,7 +25,7 @@ if __name__ == "__main__":
                             format='%(asctime)s - %(levelname)s - %(message)s',
                             level=logging.DEBUG)
 
-    printing.checkUsage(sys.argv)
+    utils.checkUsage(sys.argv)
     print("Searching for book: " + sys.argv[1])
 
     asyncio.run(concurrent_search(sys.argv[1]))

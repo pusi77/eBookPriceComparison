@@ -4,7 +4,7 @@ import time
 from bs4 import BeautifulSoup
 
 import Book
-from utils import printing
+from utils import utils
 
 
 NAME = "librerie.coop"
@@ -31,8 +31,8 @@ async def getProtection(url: str):
 
 class LibrerieCoop():
     @staticmethod
-    async def searchBook(title: str):
-        url = f"{BASE_URL}/search/?q={title}&cerca_in=titolo"
+    async def searchBook(searchedTitle: str):
+        url = f"{BASE_URL}/search/?q={searchedTitle}&cerca_in=titolo"
         logging.debug(f"Starting {NAME} download")
         start_t = time.time()
         async with aiohttp.ClientSession() as session:
@@ -60,4 +60,4 @@ class LibrerieCoop():
             drm = await getProtection(str(BASE_URL) + book_url['href'])
             booklist.append(Book.Book(title, author, price,
                                       format_.upper(), drm))
-        printing.store_print(NAME, booklist)
+        utils.store_print(searchedTitle, NAME, booklist)

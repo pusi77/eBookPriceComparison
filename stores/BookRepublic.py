@@ -4,7 +4,7 @@ import time
 from bs4 import BeautifulSoup
 
 import Book
-from utils import printing
+from utils import utils
 
 
 NAME = "BookRepublic"
@@ -20,8 +20,8 @@ DRM_CLASS = "h6"
 
 class BookRepublic():
     @staticmethod
-    async def searchBook(title: str):
-        url = f"{BASE_URL}/search/?q={title}"
+    async def searchBook(searchedTitle: str):
+        url = f"{BASE_URL}/search/?q={searchedTitle}"
         logging.debug(f"Starting {NAME} download")
         start_t = time.time()
         async with aiohttp.ClientSession() as session:
@@ -41,4 +41,4 @@ class BookRepublic():
             drm = book.findAll('div', class_=DRM_CLASS)[1].getText().strip()
             booklist.append(Book.Book(title, author, price,
                                       format_.upper(), drm))
-        printing.store_print(NAME, booklist)
+        utils.store_print(searchedTitle, NAME, booklist)

@@ -10,7 +10,21 @@ def checkUsage(argv: list):
         exit()
 
 
-def store_print(store_name: str, books: list):
+def filterRandomTitles(title: str, books: list) -> list:
+    less_random_books = []
+    for book in books:
+        random = False
+        for word in title.lower().split(' '):
+            if word not in book.title.lower():
+                random = True
+                break
+        if not random:
+            less_random_books.append(book)
+    return less_random_books
+
+
+def store_print(title: str, store_name: str, books: list):
+    books = filterRandomTitles(title, books)
     book_infos = []
     print("\U0001F56E  " + store_name)
     if not books:
@@ -20,3 +34,4 @@ def store_print(store_name: str, books: list):
             book_infos.append(book.infos())
         print(tabulate(book_infos, headers=HEADERS, tablefmt="pretty",
                        colalign="left"))
+        
