@@ -2,6 +2,7 @@ import aiohttp
 import logging
 import time
 import urllib.parse
+import re
 from bs4 import BeautifulSoup
 
 import Book
@@ -11,6 +12,9 @@ from utils import printing
 NAME = "Unilibro"
 BASE_URL = "https://www.unilibro.it"
 
+
+BOOK_CLASS = "block-vet bv-cinque"
+PRICE_CLASS = "prezzo-vet"
 
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0",
@@ -30,6 +34,15 @@ headers = {
     "TE": "trailers"
 }
 
+async def ebookDRM(url: str, cookies):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers=headers, cookies=cookies) as response:
+            content = await response.text()
+            soup = BeautifulSoup(content, 'html.parser')
+    drm = [li.text for li in soup.find_all("li") if 'Protezione:' in li.text][0].replace("Protezione:", "")
+    drm = drm.replace(" (richiede Adobe Digital Editions)", "")
+    return drm
+
 class Unilibro():
     @staticmethod
     async def searchBook(title: str):
@@ -45,26 +58,22 @@ class Unilibro():
             data = f"search=%2FUnilibro%2FSearch.ff%3Fquery%3D{safe_title}%26filterProdGroup%3D09%26channel%3Dit%26productsPerPage%3D20%26xml%3Dtrue"
             async with session.post(url, data=data, headers=headers, cookies=cookies) as response:
                 # Handle the response as needed
-                data = await response.text()
+                content = await response.text()
                 end_t = time.time()
                 logging.debug(f"{NAME} downloaded in {end_t - start_t}")
-                print(data)
 
-        # async with aiohttp.ClientSession() as session:
-        #     async with session.get(url) as response:
-        #         content = await response.text()
-        #         end_t = time.time()
-        #         logging.debug(f"{NAME} downloaded in {end_t - start_t}")
-        # soup = BeautifulSoup(content, 'html.parser')
-        # data = soup.find_all('div', class_=BOOK_CLASS)
-        # booklist = []
-        # for book in data:
-        #     title = book.find('div', class_=TITLE_CLASS).get_text().strip()
-        #     author = book.find('div', class_=AUTHOR_CLASS).getText().strip()
-        #     price = book.find('span', class_=PRICE_CLASS).get_text()
-        #     format_ = book.find('div', class_=FORMAT_CLASS) \
-        #                   .getText().strip("Formato: ")
-        #     drm = book.findAll('div', class_=DRM_CLASS)[1].getText().strip()
-        #     booklist.append(Book.Book(title, author, price,
-        #                               format_.upper(), drm))
-        # printing.store_print(NAME, booklist)
+            soup = BeautifulSoup(content, 'html.parser')
+            data = soup.find_all('div', class_=BOOK_CLASS)
+            booklist = []
+            for book in data:
+                book_title_string = book.find('h5').get_text().strip()
+                title = book_title_string.split(". E-book.")[0]
+                author = book.find('h6').get_text().strip()
+                price = book.find('div', class_=PRICE_CLASS).get_text()
+                format_ = book_title_string.split("Formato ")[1]
+
+                book_url = book.find('a', class_="c-")['href']
+                drm = await ebookDRM(book_url, cookies)
+                booklist.append(Book.Book(title, author, price,
+                                        format_, drm))
+            printing.store_print(NAME, booklist)
