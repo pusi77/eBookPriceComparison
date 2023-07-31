@@ -40,7 +40,7 @@ async def ebookInfos(url: str):
 
 class Libraccio():
     @staticmethod
-    async def searchBook(searchedTitle: str):
+    async def searchBook(searchedTitle: str, args):
         url = f"{BASE_URL}/src/?xy={searchedTitle}&ch={EBOOK_QUERY}"
         logging.debug(f"Starting {NAME} download")
         start_t = time.time()
@@ -68,4 +68,4 @@ class Libraccio():
                 print(f'ERROR: {e}')
                 logging.debug(e)
                 continue
-        utils.store_print(searchedTitle, NAME, booklist)
+        utils.store_print(searchedTitle, NAME, booklist, args)

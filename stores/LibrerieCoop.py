@@ -31,7 +31,7 @@ async def getProtection(url: str):
 
 class LibrerieCoop():
     @staticmethod
-    async def searchBook(searchedTitle: str):
+    async def searchBook(searchedTitle: str, args):
         url = f"{BASE_URL}/search/?q={searchedTitle}&cerca_in=titolo"
         logging.debug(f"Starting {NAME} download")
         start_t = time.time()
@@ -60,4 +60,4 @@ class LibrerieCoop():
             drm = await getProtection(str(BASE_URL) + book_url['href'])
             booklist.append(Book.Book(title, author, price,
                                       format_.upper(), drm))
-        utils.store_print(searchedTitle, NAME, booklist)
+        utils.store_print(searchedTitle, NAME, booklist, args)

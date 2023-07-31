@@ -10,7 +10,9 @@ def checkUsage(argv: list):
         exit()
 
 
-def filterRandomTitles(title: str, books: list) -> list:
+def filterRandomTitles(title: str, books: list, args) -> list:
+    print(args.unfiltered)
+    print(type(args.unfiltered))
     less_random_books = []
     for book in books:
         random = False
@@ -23,8 +25,8 @@ def filterRandomTitles(title: str, books: list) -> list:
     return less_random_books
 
 
-def store_print(title: str, store_name: str, books: list):
-    books = filterRandomTitles(title, books)
+def store_print(title: str, store_name: str, books: list, args):
+    books = filterRandomTitles(title, books, args)
     book_infos = []
     print("\U0001F56E  " + store_name)
     if not books:

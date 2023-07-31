@@ -20,7 +20,7 @@ DRM_CLASS = "h6"
 
 class BookRepublic():
     @staticmethod
-    async def searchBook(searchedTitle: str):
+    async def searchBook(searchedTitle: str, args):
         url = f"{BASE_URL}/search/?q={searchedTitle}"
         logging.debug(f"Starting {NAME} download")
         start_t = time.time()
@@ -41,4 +41,4 @@ class BookRepublic():
             drm = book.findAll('div', class_=DRM_CLASS)[1].getText().strip()
             booklist.append(Book.Book(title, author, price,
                                       format_.upper(), drm))
-        utils.store_print(searchedTitle, NAME, booklist)
+        utils.store_print(searchedTitle, NAME, booklist, args)

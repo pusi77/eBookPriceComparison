@@ -45,7 +45,7 @@ async def ebookDRM(url: str, cookies):
 
 class Unilibro():
     @staticmethod
-    async def searchBook(searchedTitle: str):
+    async def searchBook(searchedTitle: str, args):
         url = f"{BASE_URL}/libri/ff"
         logging.debug(f"Starting {NAME} download")
         start_t = time.time()
@@ -76,4 +76,4 @@ class Unilibro():
                 drm = await ebookDRM(book_url, cookies)
                 booklist.append(Book.Book(title, author, price,
                                         format_, drm))
-            utils.store_print(searchedTitle, NAME, booklist)
+            utils.store_print(searchedTitle, NAME, booklist, args)
