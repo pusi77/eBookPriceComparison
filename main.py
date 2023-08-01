@@ -10,7 +10,7 @@ from stores import Unilibro
 DEBUG = False
 parser = argparse.ArgumentParser()
 parser.add_argument("-u", "--unfiltered", help="get unfiltered results", action='store_true')
-parser.add_argument('title')
+parser.add_argument("title", help="title of the book")
 args = parser.parse_args()
 
 async def concurrent_search(book_name: str):
