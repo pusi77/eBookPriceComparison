@@ -70,8 +70,11 @@ class Unilibro():
                 title = book_title_string.split(". E-book.")[0]
                 author = book.find('h6').get_text().strip()
                 price = book.find('div', class_=PRICE_CLASS).get_text()
-                format_ = book_title_string.split("Formato ")[1]
-
+                try:
+                    format_ = book_title_string.split("Formato ")[1]
+                except IndexError:
+                    # Not an ebook
+                    continue
                 book_url = book.find('a', class_="c-")['href']
                 drm = await ebookDRM(book_url, cookies)
                 booklist.append(Book.Book(title, author, price,
