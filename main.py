@@ -1,22 +1,24 @@
-import sys
 import asyncio
 import logging
+import argparse
 
-from utils import printing
 from stores import BookRepublic
 from stores import Libraccio
 from stores import LibrerieCoop
 from stores import Unilibro
 
 DEBUG = False
-
+parser = argparse.ArgumentParser()
+parser.add_argument("-u", "--unfiltered", help="get unfiltered results", action='store_true')
+parser.add_argument("title", help="title of the book")
+args = parser.parse_args()
 
 async def concurrent_search(book_name: str):
     await asyncio.gather(
-        BookRepublic.BookRepublic.searchBook(book_name),
-        Libraccio.Libraccio.searchBook(book_name),
-        LibrerieCoop.LibrerieCoop.searchBook(book_name),
-        Unilibro.Unilibro.searchBook(book_name)
+        BookRepublic.BookRepublic.searchBook(book_name, args),
+        Libraccio.Libraccio.searchBook(book_name, args),
+        LibrerieCoop.LibrerieCoop.searchBook(book_name, args),
+        Unilibro.Unilibro.searchBook(book_name, args)
     )
 
 if __name__ == "__main__":
@@ -25,7 +27,6 @@ if __name__ == "__main__":
                             format='%(asctime)s - %(levelname)s - %(message)s',
                             level=logging.DEBUG)
 
-    printing.checkUsage(sys.argv)
-    print("Searching for book: " + sys.argv[1])
+    print("Searching for book: " + args.title)
 
-    asyncio.run(concurrent_search(sys.argv[1]))
+    asyncio.run(concurrent_search(args.title))

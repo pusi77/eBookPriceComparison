@@ -4,7 +4,7 @@ import time
 from bs4 import BeautifulSoup
 
 import Book
-from utils import printing
+from utils import utils
 
 
 # IMPORTANT NOTE:
@@ -40,8 +40,8 @@ async def ebookInfos(url: str):
 
 class Libraccio():
     @staticmethod
-    async def searchBook(title: str):
-        url = f"{BASE_URL}/src/?xy={title}&ch={EBOOK_QUERY}"
+    async def searchBook(searchedTitle: str, args):
+        url = f"{BASE_URL}/src/?xy={searchedTitle}&ch={EBOOK_QUERY}"
         logging.debug(f"Starting {NAME} download")
         start_t = time.time()
         async with aiohttp.ClientSession() as session:
@@ -68,4 +68,4 @@ class Libraccio():
                 print(f'ERROR: {e}')
                 logging.debug(e)
                 continue
-        printing.store_print(NAME, booklist)
+        utils.store_print(searchedTitle, NAME, booklist, args)

@@ -6,7 +6,7 @@ import re
 from bs4 import BeautifulSoup
 
 import Book
-from utils import printing
+from utils import utils
 
 
 NAME = "Unilibro"
@@ -45,7 +45,7 @@ async def ebookDRM(url: str, cookies):
 
 class Unilibro():
     @staticmethod
-    async def searchBook(title: str):
+    async def searchBook(searchedTitle: str, args):
         url = f"{BASE_URL}/libri/ff"
         logging.debug(f"Starting {NAME} download")
         start_t = time.time()
@@ -54,7 +54,7 @@ class Unilibro():
             async with session.get(BASE_URL, headers=headers):
                 cookies = session.cookie_jar.filter_cookies(BASE_URL)
 
-            safe_title = urllib.parse.quote_plus(title)
+            safe_title = urllib.parse.quote_plus(searchedTitle)
             data = f"search=%2FUnilibro%2FSearch.ff%3Fquery%3D{safe_title}%26filterProdGroup%3D09%26channel%3Dit%26productsPerPage%3D20%26xml%3Dtrue"
             async with session.post(url, data=data, headers=headers, cookies=cookies) as response:
                 # Handle the response as needed
@@ -76,4 +76,4 @@ class Unilibro():
                 drm = await ebookDRM(book_url, cookies)
                 booklist.append(Book.Book(title, author, price,
                                         format_, drm))
-            printing.store_print(NAME, booklist)
+            utils.store_print(searchedTitle, NAME, booklist, args)
