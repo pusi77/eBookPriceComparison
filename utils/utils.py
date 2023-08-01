@@ -2,17 +2,9 @@ from tabulate import tabulate
 
 HEADERS = ("Title", "Author", "Price", "Format", "DRM")
 
-def checkUsage(argv: list):
-    if len(argv) != 2:
-        print('ERROR: Wrong number of arguments!\n')
-        print('USAGE: main.py "bookname"')
-        print('Example: main.py "the hitchhiker\'s guide to the galaxy"')
-        exit()
-
-
 def filterRandomTitles(title: str, books: list, args) -> list:
-    print(args.unfiltered)
-    print(type(args.unfiltered))
+    if args.unfiltered:
+        return books
     less_random_books = []
     for book in books:
         random = False
